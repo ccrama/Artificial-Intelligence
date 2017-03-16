@@ -1,0 +1,51 @@
+
+Loading wumpus rules...
+Loading additional knowledge...
+-----------------------
+Current Instance<logical_expression.logical_expression instance at 0x7f7d4851ba70>
+------------------------
+
+
+[''] ['and'] [<logical_expression.logical_expression instance at 0x7f7d4851bd40>, <logical_expression.logical_expression instance at 0x7f7d4851be60>, <logical_expression.logical_expression instance at 0x7f7d4851e560>, <logical_expression.logical_expression instance at 0x7f7d4851ee60>]
+
+
+-----------------------
+Current Instance<logical_expression.logical_expression instance at 0x7f7d484a5248>
+------------------------
+
+
+['b'] [''] []
+
+
+-----------------------
+Current Instance<logical_expression.logical_expression instance at 0x7f7d484a5e18>
+------------------------
+
+
+['b'] [''] []
+
+
+-----------------------
+Current Instance<logical_expression.logical_expression instance at 0x7f7d484a5dd0>
+------------------------
+
+
+['f'] [''] []
+
+
+-----------------------
+Current Instance<logical_expression.logical_expression instance at 0x7f7d484a67e8>
+------------------------
+
+
+['d'] [''] []
+
+
+-----------------------
+Current Instance<logical_expression.logical_expression instance at 0x7f7d484a6a28>
+------------------------
+
+
+[''] ['iff'] [<logical_expression.logical_expression instance at 0x7f7d484a6c20>, <logical_expression.logical_expression instance at 0x7f7d484a6d40>]
+
+
