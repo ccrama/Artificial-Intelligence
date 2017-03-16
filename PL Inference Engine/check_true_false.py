@@ -61,7 +61,21 @@ def check_true_false(knowledge_base, statement, m_dict):
 
 
 def tt_check_all(kb, alpha, symbols, model):
+    if not symbols:
+        if pl_true(kb, model):
+            return pl_true(alpha, model)
+        else 
+            return true
+    
+    p = symbols[0]
+    rest = symbols[1:]
+    
+    return tt_check_all(kb, alpha, rest, model + {p: True}) \
+           and tt_check_all(kb, alpha, rest, model + {p: False})
+
+def pl_true(expression, model):
     pass
+
 
 def main(argv):    
     if len(argv) != 4:
