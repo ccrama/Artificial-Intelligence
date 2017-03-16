@@ -19,7 +19,7 @@
 import sys
 from logical_expression import *
 
-def check_true_false(knowledge_base, statement):
+def check_true_false(knowledge_base, statement, m_dict):
     try:
         output_file = open('result.txt', 'w')
     except:
@@ -27,6 +27,8 @@ def check_true_false(knowledge_base, statement):
     
     kb_symbols = []
     s_symbols = []
+
+    model = m_dict.copy();
 
     # extracting all the symbols from the KB
     extract_symbols(knowledge_base, kb_symbols)
@@ -41,17 +43,25 @@ def check_true_false(knowledge_base, statement):
     # Removing the duplicates
     symbols = list(set(kb_symbols))
 
-    print symbols
+    # removing the symbols I know are true
+    
+    for key in model.keys():
+        try:
+            symbols.remove(key)
+        except Exception:
+            print 'TODO.. symbols are different'
 
+    
+    print symbols        
     # Doing the TT check
-    result = tt_check_all(knowledge_base, statement, symbols, {})
+    result = tt_check_all(knowledge_base, statement, symbols, model)
 
     output_file.write('result unknown')    
     output_file.close()
 
+
 def tt_check_all(kb, alpha, symbols, model):
     pass
-
 
 def main(argv):    
     if len(argv) != 4:
@@ -65,6 +75,9 @@ def main(argv):
         print('failed to open file %s' % argv[1])
         sys.exit(0)
 
+    # This is basically for optimizing the TT-Entails.    
+    m_dict = {}
+
     # Create the knowledge base with wumpus rules
     print '\nLoading wumpus rules...'
     knowledge_base = logical_expression()
@@ -75,7 +88,11 @@ def main(argv):
             continue
 
         counter = [0]  # A mutable counter so recursive calls don't just make a copy
+
         subexpression = read_expression(line.rstrip('\r\n'), counter)
+
+        if subexpression.connective[0] == '':
+            m_dict[subexpression.symbol[0]] = True
 
         knowledge_base.subexpressions.append(subexpression)
     input_file.close()
@@ -95,6 +112,10 @@ def main(argv):
             continue
         counter = [0]  # a mutable counter
         subexpression = read_expression(line.rstrip('\r\n'), counter)
+
+        if subexpression.connective == '':
+            m_dict[subexpression.symbol[0]] = True
+
         knowledge_base.subexpressions.append(subexpression)
 
     input_file.close()
@@ -134,8 +155,11 @@ def main(argv):
     print_expression(statement, '')
     print    
 
+    print m_dict
+
     # Run the statement through the inference engine
-    check_true_false(knowledge_base, statement)
+    check_true_false(knowledge_base, statement, m_dict
+)
 
     sys.exit(1)
     
