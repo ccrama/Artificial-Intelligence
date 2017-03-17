@@ -211,81 +211,73 @@ def tt_check_all(kb, alpha, symbols, model):
 
 # PL TRUE FUNCTION
 def pl_true(expression, model):
-
     # Check for connective AND
     if expression.connective[0].lower() == 'and':
         # A boolean value that will return the value for this expression
         bool_value = True
         # Going over all the subexpressions and AND-ing them.
         for i, subexpression in enumerate(expression.subexpressions):
-            
             # Finding the inital value of the bool.
             if(i == 0):
                 bool_value = pl_true(subexpression, model)
                 continue;
-
             bool_value = bool_value and pl_true(subexpression, model)
         # Returning the value of all the AND subexpressions.
         return bool_value
 
     # Check for connective OR
     elif expression.connective[0].lower() == 'or':
-       
         bool_value = True
         for i, subexpression in enumerate(expression.subexpressions):
-
             if(i == 0):
                 bool_value = pl_true(subexpression, model)
                 continue;
             bool_value = bool_value or pl_true(subexpression, model)
-        
         return bool_value
 
     # Check for the connective NOT
     elif expression.connective[0].lower() == 'not':
         # A boolean value that will return the value for this expression
         # Here, we are just concerned with the not of the value.
-        bool_value = not expression.subexpressions[0]
+        bool_value = not pl_true(expression.subexpressions[0], model)
         return bool_value
 
     # Check for the connective XOR
     elif expression.connective[0].lower() == 'xor':
-         
         bool_value = True
         for i, subexpression in enumerate(expression.subexpressions):
-
             if(i == 0):
                 bool_value = pl_true(subexpression, model)
                 continue;
-
             # taking the XOR
             bool_value = bool_value ^ pl_true(subexpression, model)
-        
         return bool_value
 
     elif expression.connective[0].lower() == 'if':
-        
         bool_value = True
         for i, subexpression in enumerate(expression.subexpressions):
-
             if(i == 0):
                 bool_value = pl_true(subexpression, model)
                 continue;
-
             bool_value = (not bool_value) or pl_true(subexpression, model)
         return bool_value
 
     elif expression.connective[0].lower() == 'iff':
-        
         bool_value = True
         for i, subexpression in enumerate(expression.subexpressions):
-
             if(i == 0):
                 bool_value = pl_true(subexpression, model)
                 continue;
-
             bool_value = not (bool_value ^ pl_true(subexpression, model))
         return bool_value
-    else:
-        # return the value of the symbol from the model dictionary
-        return model[expression.symbol[0]]
+    
+    # return the value of the symbol from the model dictionary
+    return model[expression.symbol[0]]
+
+def testing(expression):
+
+    for i, subexpression in enumerate(expression.subexpressions):
+        print subexpression.connective
+        print subexpression.symbol
+        print '-----------------------------'
+        testing(subexpression)

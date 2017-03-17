@@ -59,6 +59,10 @@ def check_true_false(knowledge_base, statement, not_statement, m_dict):
     # Removing the duplicates
     symbols = list(set(kb_symbols))
 
+    # print '----TESTING----------'
+    # testing(knowledge_base)
+    # print 'TESTING COMPLETE------------'
+
     # removing the symbols I know are true
     for key in model.keys():
         try:
