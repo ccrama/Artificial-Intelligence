@@ -170,6 +170,11 @@ def valid_symbol(symbol):
             return 0
     return 1
 
+# End of ported code
+#-------------------------------------------------------------------------------
+
+# Add all your functions here
+
 # Extracting all the symbols in this function.
 def extract_symbols(expression, symbols):
 
@@ -189,12 +194,16 @@ def extend_model(model, key, value):
 def tt_check_all(kb, alpha, symbols, model):
 
     if not symbols:
+        # If true in the knowledge base
         if pl_true(kb, model):
+            # return the value for the sentence for that model
             return pl_true(alpha, model)
         else:
             return True
     
+    # Getting the first symbol
     p = symbols[0]
+    # Storing the rest of the symbol
     rest = symbols[1:]
 
     return tt_check_all( kb, alpha, rest, extend_model(model, p, True) ) \
@@ -221,17 +230,15 @@ def pl_true(expression, model):
 
     # Check for connective OR
     elif expression.connective[0].lower() == 'or':
-        # A boolean value that will return the value for this expression
+       
         bool_value = True
-        # Going over all the subexpressions and OR-ing them.
         for i, subexpression in enumerate(expression.subexpressions):
 
             if(i == 0):
                 bool_value = pl_true(subexpression, model)
                 continue;
-
             bool_value = bool_value or pl_true(subexpression, model)
-        # Returning the value of all the OR subexpressions.
+        
         return bool_value
 
     # Check for the connective NOT
@@ -243,9 +250,8 @@ def pl_true(expression, model):
 
     # Check for the connective XOR
     elif expression.connective[0].lower() == 'xor':
-         # A boolean value that will return the value for this expression
+         
         bool_value = True
-        # Going over all the subexpressions and XOR-ing them.
         for i, subexpression in enumerate(expression.subexpressions):
 
             if(i == 0):
@@ -254,11 +260,11 @@ def pl_true(expression, model):
 
             # taking the XOR
             bool_value = bool_value ^ pl_true(subexpression, model)
-        # Returning the value of all the XOR subexpressions.
+        
         return bool_value
 
     elif expression.connective[0].lower() == 'if':
-        # A boolean value that will return the value for this expression
+        
         bool_value = True
         for i, subexpression in enumerate(expression.subexpressions):
 
@@ -270,7 +276,7 @@ def pl_true(expression, model):
         return bool_value
 
     elif expression.connective[0].lower() == 'iff':
-        # A boolean value that will return the value for this expression
+        
         bool_value = True
         for i, subexpression in enumerate(expression.subexpressions):
 
@@ -281,11 +287,5 @@ def pl_true(expression, model):
             bool_value = not (bool_value ^ pl_true(subexpression, model))
         return bool_value
     else:
+        # return the value of the symbol from the model dictionary
         return model[expression.symbol[0]]
-
-
-
-# End of ported code
-#-------------------------------------------------------------------------------
-
-# Add all your functions here

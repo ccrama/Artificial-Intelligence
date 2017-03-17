@@ -19,6 +19,16 @@
 import sys
 from logical_expression import *
 
+
+'''
+@description: This function checks for the statement and the not_statement and returns
+              if the statements entail KB.
+
+@Params: knowledge_base: The knowledge
+         statement: alpha
+         not_statement: negation of alpha
+         m_dict: All the known truth values 
+'''
 def check_true_false(knowledge_base, statement, not_statement, m_dict):
     
     try:
@@ -26,10 +36,15 @@ def check_true_false(knowledge_base, statement, not_statement, m_dict):
     except:
         print('failed to create output file')
     
+    # Storing all the knowledge_base symbols.
     kb_symbols = []
+    # Storing all the sentence variables
+    # NOTE: not_setence and sentence will have the same variables.
     s_symbols = []
 
-    model = m_dict.copy();
+    # Making a shallow copy of the m_dict and storing the values
+    # in the model
+    model = m_dict.copy(); 
 
     # extracting all the symbols from the KB
     extract_symbols(knowledge_base, kb_symbols)
@@ -45,20 +60,25 @@ def check_true_false(knowledge_base, statement, not_statement, m_dict):
     symbols = list(set(kb_symbols))
 
     # removing the symbols I know are true
-    
     for key in model.keys():
         try:
             symbols.remove(key)
         except Exception:
-            print 'TODO.. symbols are different'
 
-    # Doing the TT check
+            print
+            print 'Sentence contains symbols not present in the KB'
+            sys.exit(0)
+
+    # Doing the TT check for alpha
     result_alpha = tt_check_all(knowledge_base, statement, symbols, model)
 
+    # Doing the TT check for negation of alpha
     result_not_alpha = tt_check_all(knowledge_base, not_statement, symbols, model)
     
     print                 
     print 'ANSWER: ', 
+
+    # Different answers depending on the values of alpha and not alpha
     if result_alpha == True and result_not_alpha == False:
         output_file.write('definitely true') 
         print 'definitely true'
@@ -157,9 +177,10 @@ def main(argv):
     # Convert statement into a logical expression and verify it is valid
     statement = read_expression(statement)
 
-
+    # Cause this makes my code work.
     counter = [0]
 
+    # Convert statement into a logical expression and verify it is valid 
     not_statement = read_expression(not_statement, counter)
 
     if not valid_expression(statement):
