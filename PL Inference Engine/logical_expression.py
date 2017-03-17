@@ -65,6 +65,7 @@ def read_expression(input_string, counter=[0]):
     """Reads the next logical expression in input_string"""
     # Note: counter is a list because it needs to be a mutable object so the
     # recursive calls can change it, since we can't pass the address in Python.
+    
     result = logical_expression()
     length = len(input_string)
     while True:

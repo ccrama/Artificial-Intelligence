@@ -1,0 +1,14 @@
+
+Loading wumpus rules...
+Loading additional knowledge...
+(and (or (and b (not (iff c (if d e))) (or c (not e) (if d (not e))) symbol1) symbol2 symbol3)
+ (AND b (not c) (if d (if e (not b))))
+ (if b (if d (if e (not b))))
+ f
+ (not d)
+ (if (iff d e) f)
+)Loading statement...
+t
+Checking statement: (and a (not b))
+True
+True

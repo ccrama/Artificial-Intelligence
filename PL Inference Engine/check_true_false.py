@@ -19,7 +19,8 @@
 import sys
 from logical_expression import *
 
-def check_true_false(knowledge_base, statement, m_dict):
+def check_true_false(knowledge_base, statement, not_statement, m_dict):
+    
     try:
         output_file = open('result.txt', 'w')
     except:
@@ -52,28 +53,29 @@ def check_true_false(knowledge_base, statement, m_dict):
             print 'TODO.. symbols are different'
 
     # Doing the TT check
-    result = tt_check_all(knowledge_base, statement, symbols, model)
+    result_alpha = tt_check_all(knowledge_base, statement, symbols, model)
 
-    print result
-
-    output_file.write('result unknown')    
-    output_file.close()
-
-# Debugging purposes only
-# def test_recursion(expression):
-#     if not expression.connective:
-#         print expression.symbol
-#     else:
-#         print expression.connective
-#         print expression.symbol
-#         print len(expression.subexpressions)
+    result_not_alpha = tt_check_all(knowledge_base, not_statement, symbols, model)
+    
+    print                 
+    print 'ANSWER: ', 
+    if result_alpha == True and result_not_alpha == False:
+        output_file.write('definitely true') 
+        print 'definitely true'
+    elif result_alpha == False and result_not_alpha == True:
+        output_file.write('definitely false')
+        print 'definitely false'
+    elif result_alpha == False and result_not_alpha == False:
+        output_file.write('possibly true, possibly false')
+        print 'possibly true, possibly false'
+    elif result_alpha == True and result_not_alpha == True:
+        output_file.write('both true and false')
+        print 'both true and false'
+    else:
+        output_file.write('Error in the code')    
         
-#         for subexpression in expression.subexpressions:
-#             print '------------------------'
-#             test_recursion(subexpression)
-#             print '------------------------'
-
-
+    print 
+    output_file.close()
 
 
 def main(argv):    
@@ -133,14 +135,6 @@ def main(argv):
 
     input_file.close()
 
-    ## TODO: REMOVE DEBUG CODE.
-    # print knowledge_base.connective
-    # print knowledge_base.symbol
-    # print '------------------------'
-
-    # for subexpressions in knowledge_base.subexpressions:
-    #     print subexpressions.connective
-
     # Verify it is a valid logical expression
     if not valid_expression(knowledge_base):
         sys.exit('invalid knowledge base')
@@ -157,20 +151,30 @@ def main(argv):
     print 'Loading statement...'
     statement = input_file.readline().rstrip('\r\n')
     input_file.close()
-    
+
+    not_statement = '(not '+ statement + ')'
+
     # Convert statement into a logical expression and verify it is valid
     statement = read_expression(statement)
+
+
+    counter = [0]
+
+    not_statement = read_expression(not_statement, counter)
+
     if not valid_expression(statement):
         sys.exit('invalid statement')
 
     # Show us what the statement is
-    print '\nChecking statement: ',
+    print '\nChecking statement alpha: ',
     print_expression(statement, '')
+    print
+    print '\nChecking statement NOT alpha: ',
+    print_expression(not_statement, '')
     print    
 
     # Run the statement through the inference engine
-    check_true_false(knowledge_base, statement, m_dict
-)
+    check_true_false(knowledge_base, statement, not_statement, m_dict)
 
     sys.exit(1)
     
