@@ -51,30 +51,29 @@ def check_true_false(knowledge_base, statement, m_dict):
         except Exception:
             print 'TODO.. symbols are different'
 
-    
-    print symbols        
     # Doing the TT check
     result = tt_check_all(knowledge_base, statement, symbols, model)
+
+    print result
 
     output_file.write('result unknown')    
     output_file.close()
 
+# Debugging purposes only
+# def test_recursion(expression):
+#     if not expression.connective:
+#         print expression.symbol
+#     else:
+#         print expression.connective
+#         print expression.symbol
+#         print len(expression.subexpressions)
+        
+#         for subexpression in expression.subexpressions:
+#             print '------------------------'
+#             test_recursion(subexpression)
+#             print '------------------------'
 
-def tt_check_all(kb, alpha, symbols, model):
-    if not symbols:
-        if pl_true(kb, model):
-            return pl_true(alpha, model)
-        else 
-            return true
-    
-    p = symbols[0]
-    rest = symbols[1:]
-    
-    return tt_check_all(kb, alpha, rest, model + {p: True}) \
-           and tt_check_all(kb, alpha, rest, model + {p: False})
 
-def pl_true(expression, model):
-    pass
 
 
 def main(argv):    
@@ -168,8 +167,6 @@ def main(argv):
     print '\nChecking statement: ',
     print_expression(statement, '')
     print    
-
-    print m_dict
 
     # Run the statement through the inference engine
     check_true_false(knowledge_base, statement, m_dict

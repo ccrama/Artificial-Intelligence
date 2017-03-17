@@ -20,7 +20,7 @@
 #               called le, we'd call foo(le.symbol,...). If foo needs to modify
 #               le.symbol, it will need to index it (i.e. le.symbol[0]) so that
 #               the change will persist.
-#              *Written to be Python 2.4 compliant for omega.uta.edui
+#              *Written to be Python 2.4 compliant for omega.uta.edu
 # 
 # Name:         Arnav Garg
 # Class:        CSE 4308 - 001
@@ -177,6 +177,110 @@ def extract_symbols(expression, symbols):
 
     for subexpression in expression.subexpressions:
         extract_symbols(subexpression, symbols)
+
+# A function for extending the dictionary.
+# Pretty useless but essential because... Python
+def extend_model(model, key, value):
+    model[key] = value
+    return model
+
+# TT-CHECK-ALL FUNCTION. 
+def tt_check_all(kb, alpha, symbols, model):
+
+    if not symbols:
+        if pl_true(kb, model):
+            return pl_true(alpha, model)
+        else:
+            return True
+    
+    p = symbols[0]
+    rest = symbols[1:]
+
+    return tt_check_all( kb, alpha, rest, extend_model(model, p, True) ) \
+           and tt_check_all( kb, alpha, rest, extend_model(model, p, False) )
+
+# PL TRUE FUNCTION
+def pl_true(expression, model):
+
+    # Check for connective AND
+    if expression.connective[0].lower() == 'and':
+        # A boolean value that will return the value for this expression
+        bool_value = True
+        # Going over all the subexpressions and AND-ing them.
+        for i, subexpression in enumerate(expression.subexpressions):
+            
+            # Finding the inital value of the bool.
+            if(i == 0):
+                bool_value = pl_true(subexpression, model)
+                continue;
+
+            bool_value = bool_value and pl_true(subexpression, model)
+        # Returning the value of all the AND subexpressions.
+        return bool_value
+
+    # Check for connective OR
+    elif expression.connective[0].lower() == 'or':
+        # A boolean value that will return the value for this expression
+        bool_value = True
+        # Going over all the subexpressions and OR-ing them.
+        for i, subexpression in enumerate(expression.subexpressions):
+
+            if(i == 0):
+                bool_value = pl_true(subexpression, model)
+                continue;
+
+            bool_value = bool_value or pl_true(subexpression, model)
+        # Returning the value of all the OR subexpressions.
+        return bool_value
+
+    # Check for the connective NOT
+    elif expression.connective[0].lower() == 'not':
+        # A boolean value that will return the value for this expression
+        # Here, we are just concerned with the not of the value.
+        bool_value = not expression.subexpressions[0]
+        return bool_value
+
+    # Check for the connective XOR
+    elif expression.connective[0].lower() == 'xor':
+         # A boolean value that will return the value for this expression
+        bool_value = True
+        # Going over all the subexpressions and XOR-ing them.
+        for i, subexpression in enumerate(expression.subexpressions):
+
+            if(i == 0):
+                bool_value = pl_true(subexpression, model)
+                continue;
+
+            # taking the XOR
+            bool_value = bool_value ^ pl_true(subexpression, model)
+        # Returning the value of all the XOR subexpressions.
+        return bool_value
+
+    elif expression.connective[0].lower() == 'if':
+        # A boolean value that will return the value for this expression
+        bool_value = True
+        for i, subexpression in enumerate(expression.subexpressions):
+
+            if(i == 0):
+                bool_value = pl_true(subexpression, model)
+                continue;
+
+            bool_value = (not bool_value) or pl_true(subexpression, model)
+        return bool_value
+
+    elif expression.connective[0].lower() == 'iff':
+        # A boolean value that will return the value for this expression
+        bool_value = True
+        for i, subexpression in enumerate(expression.subexpressions):
+
+            if(i == 0):
+                bool_value = pl_true(subexpression, model)
+                continue;
+
+            bool_value = not (bool_value ^ pl_true(subexpression, model))
+        return bool_value
+    else:
+        return model[expression.symbol[0]]
 
 
 
