@@ -1,2 +1,2 @@
-A OR B OR C
-C AND F
+(OR A B)
+(AND B C)

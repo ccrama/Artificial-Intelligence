@@ -184,11 +184,13 @@ def extract_symbols(expression, symbols):
     for subexpression in expression.subexpressions:
         extract_symbols(subexpression, symbols)
 
+
 # A function for extending the dictionary.
 # Pretty useless but essential because... Python
 def extend_model(model, key, value):
     model[key] = value
     return model
+
 
 # TT-CHECK-ALL FUNCTION. 
 def tt_check_all(kb, alpha, symbols, model):
@@ -208,6 +210,7 @@ def tt_check_all(kb, alpha, symbols, model):
 
     return tt_check_all( kb, alpha, rest, extend_model(model, p, True) ) \
            and tt_check_all( kb, alpha, rest, extend_model(model, p, False) )
+
 
 # PL TRUE FUNCTION
 def pl_true(expression, model):
@@ -254,30 +257,18 @@ def pl_true(expression, model):
         return bool_value
 
     elif expression.connective[0].lower() == 'if':
-        bool_value = True
-        for i, subexpression in enumerate(expression.subexpressions):
-            if(i == 0):
-                bool_value = pl_true(subexpression, model)
-                continue;
-            bool_value = (not bool_value) or pl_true(subexpression, model)
-        return bool_value
+        # Getting the values of the two expressions I want to if.
+        A = pl_true(expression.subexpressions[0], model)
+        B = pl_true(expression.subexpressions[1], model)
+        # returing the if values for both the expressions
+        return ( (not A) or B )
 
     elif expression.connective[0].lower() == 'iff':
-        bool_value = True
-        for i, subexpression in enumerate(expression.subexpressions):
-            if(i == 0):
-                bool_value = pl_true(subexpression, model)
-                continue;
-            bool_value = not (bool_value ^ pl_true(subexpression, model))
-        return bool_value
+        # Getting the values of the two expressions I want to iff.
+        A = pl_true(expression.subexpressions[0], model)
+        B = pl_true(expression.subexpressions[1], model)
+        # returing the iff values for both the expressions
+        return ( (not A) or B ) and ( (not B) or A )
     
     # return the value of the symbol from the model dictionary
     return model[expression.symbol[0]]
-
-def testing(expression):
-
-    for i, subexpression in enumerate(expression.subexpressions):
-        print subexpression.connective
-        print subexpression.symbol
-        print '-----------------------------'
-        testing(subexpression)

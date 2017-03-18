@@ -59,19 +59,14 @@ def check_true_false(knowledge_base, statement, not_statement, m_dict):
     # Removing the duplicates
     symbols = list(set(kb_symbols))
 
-    # print '----TESTING----------'
-    # testing(knowledge_base)
-    # print 'TESTING COMPLETE------------'
-
     # removing the symbols I know are true
     for key in model.keys():
         try:
             symbols.remove(key)
         except Exception:
-
-            print
-            print 'Sentence contains symbols not present in the KB'
-            sys.exit(0)
+            # would be handled in the PL_FUNCTION itself.
+            # just added here so that the code doesn't crash
+            pass
 
     # Doing the TT check for alpha
     result_alpha = tt_check_all(knowledge_base, statement, symbols, model)
@@ -130,10 +125,19 @@ def main(argv):
 
         subexpression = read_expression(line.rstrip('\r\n'), counter)
 
+        # Adding the known values to the model for efficiency
+        # The True values
         if subexpression.connective[0] == '':
             m_dict[subexpression.symbol[0]] = True
 
+        # The False values     
+        if subexpression.connective[0].lower() == 'not':
+            if subexpression.subexpressions[0].symbol \
+            and not subexpression.subexpressions[0].connective:
+               m_dict[subexpression.subexpressions[0].symbol[0]] = False 
+
         knowledge_base.subexpressions.append(subexpression)
+
     input_file.close()
 
     # Read additional knowledge base information file
@@ -152,8 +156,15 @@ def main(argv):
         counter = [0]  # a mutable counter
         subexpression = read_expression(line.rstrip('\r\n'), counter)
 
-        if subexpression.connective == '':
+        # Adding the known values to the model for efficiency
+        # The True values
+        if subexpression.connective[0] == '':
             m_dict[subexpression.symbol[0]] = True
+
+        # The False values     
+        if subexpression.connective[0].lower() == 'not':
+            if subexpression.subexpressions[0].connective[0] == '':
+               m_dict[subexpression.subexpressions[0].symbol[0]] = False 
 
         knowledge_base.subexpressions.append(subexpression)
 
