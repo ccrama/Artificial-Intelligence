@@ -133,7 +133,7 @@ def main(argv):
         # The False values     
         if subexpression.connective[0].lower() == 'not':
             if subexpression.subexpressions[0].symbol \
-            and not subexpression.subexpressions[0].connective:
+            and subexpression.subexpressions[0].connective[0] == '':
                m_dict[subexpression.subexpressions[0].symbol[0]] = False 
 
         knowledge_base.subexpressions.append(subexpression)
@@ -208,6 +208,8 @@ def main(argv):
     print '\nChecking statement NOT alpha: ',
     print_expression(not_statement, '')
     print    
+
+    print m_dict
 
     # Run the statement through the inference engine
     check_true_false(knowledge_base, statement, not_statement, m_dict)
