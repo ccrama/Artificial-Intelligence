@@ -209,8 +209,6 @@ def main(argv):
     print_expression(not_statement, '')
     print    
 
-    print m_dict
-
     # Run the statement through the inference engine
     check_true_false(knowledge_base, statement, not_statement, m_dict)
 
