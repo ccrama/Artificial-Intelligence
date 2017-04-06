@@ -17,7 +17,6 @@ While evaluating the utility for a state, I took 3 things into consideration.
 3)Total moves more needed to score a connect 4: In this I am calculating the number of
 	more moves the player needs to make in that state to gain more series of 4.
 
-After obtaining the values, I used the following criteria after trial and error to
-evaluate the score
+After obtaining the values, I used the following criteria to evaluate the score
 
 Utility: score*10 + (100/total moves needed to score 4) + (total possible moves/100); 
