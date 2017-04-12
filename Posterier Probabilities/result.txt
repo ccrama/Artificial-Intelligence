@@ -1,0 +1,11 @@
+Observation sequence Q: CLLCCLLLCCL
+Length of Q: 11
+
+P(h1 | Q) = 0.0
+P(h2 | Q) = 0.0479479084451
+P(h3 | Q) = 0.808208366219
+P(h4 | Q) = 0.143843725335
+P(h5 | Q) = 0.0
+
+Probability that the next candy we pick will be Cherry, given Q: 0.476026045777
+Probability that the next candy we pick will be Lime, given Q: 0.523973954223
